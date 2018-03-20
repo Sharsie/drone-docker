@@ -173,7 +173,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:   "cache-from",
-			Usage:  "use tag as cache sources",
+			Usage:  "images to use as cache sources",
 			EnvVar: "PLUGIN_CACHE_FROM",
 		},
 		cli.StringSliceFlag{
@@ -247,7 +247,7 @@ func run(c *cli.Context) error {
 			Pull:        c.BoolT("pull-image"),
 			Compress:    c.Bool("compress"),
 			Repo:        c.String("repo"),
-			CacheFrom:   c.String("cache-from"),
+			CacheFrom:   c.StringSlice("cache-from"),
 			LabelSchema: c.StringSlice("label-schema"),
 			NoCache:     c.Bool("no-cache"),
 		},

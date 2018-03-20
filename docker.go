@@ -51,7 +51,7 @@ type (
 		Repo        string   // Docker build repository
 		LabelSchema []string // Label schema map
 		NoCache     bool     // Docker build no-cache
-		CacheFrom	string   // Docker build using image as cache sources
+		CacheFrom	[]string   // Docker build using image as cache sources
 	}
 
 	// Plugin defines the Docker plugin parameters.
@@ -104,9 +104,9 @@ func (p Plugin) Exec() error {
 		fmt.Println("Registry credentials not provided. Guest mode enabled.")
 	}
 
-	if p.Build.CacheFrom != "" {
+	for _, image := range p.Build.CacheFrom {
 		// Run the command ignoring the error when the image does not exist yet
-		cmd := commandPull(p.Build)
+		cmd := commandPull(image)
 		fmt.Fprintf(os.Stdout, "Pulling image as cache source")
 		trace(cmd)
 		cmd.Run()
@@ -191,8 +191,8 @@ func commandInfo() *exec.Cmd {
 }
 
 // helper function to create the docker pull command when using layer cache.
-func commandPull(build Build) *exec.Cmd {
-	return exec.Command(dockerExe, "pull", fmt.Sprintf("%s:%s", build.Repo, build.CacheFrom))
+func commandPull(image string) *exec.Cmd {
+	return exec.Command(dockerExe, "pull", image)
 }
 
 // helper function to create the docker build command.
@@ -217,8 +217,8 @@ func commandBuild(build Build) *exec.Cmd {
 	if build.NoCache {
 		args = append(args, "--no-cache")
 	}
-	if build.CacheFrom != "" {
-		args = append(args, "--cache-from", fmt.Sprintf("%s:%s",  build.Repo, build.CacheFrom))
+	for _, image := range build.CacheFrom {
+		args = append(args, "--cache-from", image)
 	}
 	for _, arg := range build.ArgsEnv {
 		addProxyValue(&build, arg)
