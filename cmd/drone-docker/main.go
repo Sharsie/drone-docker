@@ -171,7 +171,7 @@ func main() {
 			Usage:  "docker repository",
 			EnvVar: "PLUGIN_REPO",
 		},
-		cli.StringFlag{
+		cli.StringSliceFlag{
 			Name:   "cache-from",
 			Usage:  "images to use as cache sources",
 			EnvVar: "PLUGIN_CACHE_FROM",
