@@ -171,6 +171,11 @@ func main() {
 			Usage:  "docker repository",
 			EnvVar: "PLUGIN_REPO",
 		},
+		cli.StringFlag{
+			Name:   "cache-from",
+			Usage:  "use tag as cache sources",
+			EnvVar: "PLUGIN_CACHE_FROM",
+		},
 		cli.StringSliceFlag{
 			Name:   "label-schema",
 			Usage:  "label-schema labels",
@@ -242,6 +247,7 @@ func run(c *cli.Context) error {
 			Pull:        c.BoolT("pull-image"),
 			Compress:    c.Bool("compress"),
 			Repo:        c.String("repo"),
+			CacheFrom:   c.String("cache-from"),
 			LabelSchema: c.StringSlice("label-schema"),
 			NoCache:     c.Bool("no-cache"),
 		},
